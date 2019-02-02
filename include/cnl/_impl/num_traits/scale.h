@@ -10,6 +10,7 @@
 #include "../power.h"
 #include "../type_traits/enable_if.h"
 #include "../type_traits/is_integral.h"
+#include "../type_traits/is_signed.h"
 
 namespace cnl {
     template<int Digits, int Radix, class S, class Enable = void>
@@ -28,6 +29,32 @@ namespace cnl {
                 return s*cnl::power<S, Digits, Radix>();
             }
         };
+
+#if 0
+        template<int Digits, typename S>
+        struct default_scale<Digits, 2, S, _impl::enable_if_t<0<=Digits&&!is_signed<S>::value>> {
+            constexpr auto operator()(S const& s) const
+            -> decltype(s<<constant<Digits>{})
+            {
+                return s<<constant<Digits>{};
+            }
+        };
+
+        template<int Digits, typename S>
+        struct default_scale<Digits, 4, S, _impl::enable_if_t<0<=Digits>>
+                : default_scale<Digits*2, 2, S> {
+        };
+
+        template<int Digits, typename S>
+        struct default_scale<Digits, 8, S, _impl::enable_if_t<0<=Digits>>
+                : default_scale<Digits*3, 2, S> {
+        };
+
+        template<int Digits, typename S>
+        struct default_scale<Digits, 16, S, _impl::enable_if_t<0<=Digits>>
+                : default_scale<Digits*4, 2, S> {
+        };
+#endif
 
         // cnl::default_scale<-ve, cnl::constant<>>
         template<int Digits, int Radix, typename S>

@@ -23,7 +23,7 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL Clang OR ${CMAKE_CXX_COMPILER_ID} STRE
   set(MISC_FLAGS "-pthread -Wall -Wextra -Werror -ftemplate-backtrace-limit=0")
 
   if (${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
-    set(MISC_FLAGS "${MISC_FLAGS} -fconstexpr-backtrace-limit=0 -fconstexpr-steps=100000000")
+    set(MISC_FLAGS "${MISC_FLAGS} -fconstexpr-backtrace-limit=0 -fconstexpr-steps=21474836478")
   endif()
 
   set(CPP17_ENABLED_FLAGS "-std=c++17")

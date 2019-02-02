@@ -60,6 +60,51 @@ namespace {
                 cnl::static_integer<19>{2247}), "");
     }
 
+    namespace test_divide {
+        using namespace cnl::literals;
+
+#if !defined(_MSC_VER) && (__cpp_constexpr >= 201304L)
+        static_assert(
+                identical(
+                        cnl::static_integer<226>(
+                                3333333333333333333333333333333333333333333333333333333333333333333_wide),
+                        cnl::make_static_integer(
+                                10000000000000000000000000000000000000000000000000000000000000000000_wide)/3),
+                "");
+
+#if defined(__clang__) || !defined(__GNUG__) || __GNUG__ < 7
+        static_assert(
+                identical(
+                        cnl::static_integer<260>(
+                                33333333333333333333333333333333333333333333333333333333333333333333333333333_wide),
+                        cnl::make_static_integer(
+                                100000000000000000000000000000000000000000000000000000000000000000000000000000_wide)/3),
+                "");
+#endif
+
+        TEST(static_integer, divide)
+        {
+            auto expected = cnl::static_integer<226>(
+                    3333333333333333333333333333333333333333333333333333333333333333333_wide);
+            auto actual = cnl::make_static_integer(
+                    10000000000000000000000000000000000000000000000000000000000000000000_wide)/3;
+            ASSERT_EQ(expected, actual);
+        }
+#endif
+    }
+
+    namespace test_shift_left {
+        using namespace cnl::literals;
+#if !defined(_MSC_VER) && (defined(__clang__) || !defined(__GNUG__) || __GNUG__ < 7)
+        static_assert(
+                identical(
+                        cnl::make_static_integer(
+                                231584178474632390847141970017375815706539969331281128078915168015826259279872_wide),
+                        cnl::static_integer<260>{1}<<257),
+                "");
+#endif
+    }
+
     namespace test_shift_right_native {
         static_assert(identical(
                 cnl::static_integer<3, cnl::native_rounding_tag>{1},
